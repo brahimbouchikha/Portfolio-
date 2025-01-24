@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router';
 import InventoryManagementSvg from '../../assets/inventory-management.svg';
 import "./HomePage.css";
 
-
 const HomePage = () => {
   const navigate = useNavigate();
   
