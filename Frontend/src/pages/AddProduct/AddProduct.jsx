@@ -17,9 +17,9 @@ const AddProduct = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Validation Example: Ensure all fields are filled out
     for (const key in formData) {
       if (!formData[key]) {
@@ -27,21 +27,42 @@ const AddProduct = () => {
         return;
       }
     }
-
-    alert("Product added successfully!");
-    console.log(formData);
-
-    // Reset form
-    setFormData({
-      category: "",
-      productId: "",
-      name: "",
-      quantity: "",
-      unitPrice: "",
-      totalPrice: "",
-      minStock: "",
-    });
-  };
+  
+    try {
+      // Send POST request to add product
+      const response = await fetch("http://localhost:3000/api/products/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData), // Send form data as JSON
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Failed to add product: ${errorData.message}`);
+        return;
+      }
+  
+      const responseData = await response.json();
+      alert("Product added successfully!");
+      console.log("Response:", responseData);
+  
+      // Reset form
+      setFormData({
+        category: "",
+        productId: "",
+        name: "",
+        quantity: "",
+        unitPrice: "",
+        totalPrice: "",
+        minStock: "",
+      });
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("An error occurred while adding the product.");
+    }
+  };  
 
   return (
     <div className="add-product">
